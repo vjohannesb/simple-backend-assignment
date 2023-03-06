@@ -32,13 +32,13 @@ export class BrandsRepo {
     }
   }
 
-  async incrementBrandCount(brand: string): Promise<VehicleBrand> {
+  async incrementBrandCounter(brand: string): Promise<VehicleBrand> {
     const params = {
       TableName: this.table,
       Key: { brand },
-      UpdateExpression: 'ADD #count :val',
-      expressionAttributeNames: { '#count': 'count' },
-      ExpressionAttributeValues: { ':val': 1 },
+      UpdateExpression: 'ADD #counter :incrementBy',
+      expressionAttributeNames: { '#counter': 'counter' },
+      ExpressionAttributeValues: { ':incrementBy': 1 },
       ReturnValues: 'ALL_NEW',
     };
 

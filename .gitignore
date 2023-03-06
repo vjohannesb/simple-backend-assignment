@@ -1,0 +1,18 @@
+# Packages
+node_modules
+
+# Builds
+.webpack
+.serverless
+.esbuild
+
+# Code coverage
+coverage
+test-reports
+junit.xml
+
+# VSCode
+.vscode/settings.json
+
+# OSX
+.DS_Store

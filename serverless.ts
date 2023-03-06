@@ -23,17 +23,6 @@ const serverlessConfiguration: AWS = {
     architecture: 'arm64',
     httpApi: {
       cors: true,
-      authorizers: {
-        customAuthorizer: {
-          name: 'authorizer',
-          functionArn: '${self:provider.environment.AUTHORIZER}',
-          type: 'request',
-          resultTtlInSeconds: 3600,
-          enableSimpleResponses: true,
-          payloadVersion: '2.0',
-          identitySource: '$request.header.Authorization',
-        },
-      },
     },
     deploymentBucket: {
       name: '${file(config/env.yml):${self:provider.stage}.AWS_ACCOUNT}.serverless.deploys',

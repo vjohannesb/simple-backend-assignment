@@ -1,4 +1,4 @@
-import { handler } from '@/functions/vehicleBrandsStream';
+import { handler } from '@/functions/vehicleBrandsFileHandler';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { mockClient } from 'aws-sdk-client-mock';

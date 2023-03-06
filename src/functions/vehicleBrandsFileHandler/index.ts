@@ -1,7 +1,7 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { SQSRepo } from '../SQSRepo';
 import { SendMessageCommandOutput } from '@aws-sdk/client-sqs';
-import { parseBrandTextFile, validateTextFile } from './vehicleBrandsStream';
+import { parseBrandTextFile, validateTextFile } from './vehicleBrandsFileHandler';
 
 const s3 = new S3Client({ region: 'eu-north-1' });
 const sqs = new SQSRepo();

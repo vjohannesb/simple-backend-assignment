@@ -21,8 +21,8 @@ export default {
       },
     ],
   },
-  'vehicle-brands-stream': {
-    handler: 'src/functions/vehicleBrandsStream/index.handler',
+  'vehicle-brands-file-handler': {
+    handler: 'src/functions/vehicleBrandsFileHandler/index.handler',
     events: [
       {
         s3: {
@@ -33,8 +33,8 @@ export default {
       },
     ],
   },
-  'vehicle-brands-queue': {
-    handler: 'src/functions/vehicleBrandsQueue/index.handler',
+  'vehicle-brands-queue-handler': {
+    handler: 'src/functions/vehicleBrandsQueueHandler/index.handler',
     events: [
       {
         sqs: {

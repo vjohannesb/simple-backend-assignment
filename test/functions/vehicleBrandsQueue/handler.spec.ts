@@ -1,4 +1,4 @@
-import { handler } from '@/functions/vehicleBrandsQueue';
+import { handler } from '@/functions/vehicleBrandsQueueHandler';
 import { DynamoDBDocumentClient, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 

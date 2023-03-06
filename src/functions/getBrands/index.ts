@@ -6,7 +6,11 @@ export async function handler(_event: AWSLambda.APIGatewayEvent): Promise<AWSLam
   console.log('Fetching brands from DynamoDB.');
 
   const result = await repo.getBrands();
-  if (!result?.length) return notFound('No brands found.');
+  if (!result?.length) {
+    console.log('No brands found.');
+    return notFound('No brands found.');
+  }
 
+  console.log(`Found ${result.length} brands.`);
   return response(result);
 }

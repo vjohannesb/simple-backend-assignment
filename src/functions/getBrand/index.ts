@@ -4,7 +4,7 @@ import { badRequest, notFound, response } from '../response';
 const repo = new BrandsRepo();
 export async function handler(event: AWSLambda.APIGatewayEvent): Promise<AWSLambda.APIGatewayProxyResult> {
   const brand = event.pathParameters?.brand;
-  if (!brand) return badRequest('Missing "brand" path parameter.');
+  if (!brand?.length) return badRequest('Missing "brand" path parameter.');
 
   console.log('Fetching brand from DynamoDB: ', brand);
 

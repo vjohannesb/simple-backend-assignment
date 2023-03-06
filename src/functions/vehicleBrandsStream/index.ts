@@ -1,7 +1,7 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { SQSRepo } from '../SQSRepo';
 import { SendMessageCommandOutput } from '@aws-sdk/client-sqs';
-import { parseBrandTextFile } from './vehicleBrandsStream';
+import { parseBrandTextFile, validateTextFile } from './vehicleBrandsStream';
 
 const s3 = new S3Client({ region: 'eu-north-1' });
 const sqs = new SQSRepo();
@@ -29,6 +29,11 @@ export async function handler(event: AWSLambda.S3Event): Promise<void> {
       }
 
       const textFile = await s3Response.Body?.transformToString();
+      const isValidTextFile = validateTextFile(textFile);
+      if (!isValidTextFile) {
+        console.error(`Invalid file format for file: ${params.Key}`);
+        continue;
+      }
 
       brands = parseBrandTextFile(textFile);
       if (!brands?.length) {
@@ -37,19 +42,16 @@ export async function handler(event: AWSLambda.S3Event): Promise<void> {
       }
     } catch (ex) {
       console.error(`Error when fetching s3 object (${params.Key}): `, ex?.message);
+      continue;
     }
 
-    try {
-      const promises: Promise<SendMessageCommandOutput>[] = [];
-      for (const brand of brands) {
-        console.log(`Sending brand to SQS: ${brand}`);
-        promises.push(sqs.sendBrandToSQS(brand));
-      }
-
-      const result = await Promise.all(promises);
-      console.log(`SQS messages sent: ${result.length}.`);
-    } catch (ex) {
-      console.error('Error when sending brands to SQS: ', ex?.message, brands);
+    const promises: Promise<SendMessageCommandOutput>[] = [];
+    for (const brand of brands) {
+      console.log(`Sending brand to SQS: ${brand}`);
+      promises.push(sqs.sendBrandToSQS(brand));
     }
+
+    const result = await Promise.all(promises);
+    console.log(`SQS messages sent: ${result.length}.`);
   }
 }

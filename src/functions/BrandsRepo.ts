@@ -21,7 +21,7 @@ export class BrandsRepo {
   async getBrand(brand: string): Promise<VehicleBrand> {
     const params = {
       TableName: this.table,
-      Key: { brand },
+      Key: { brand: brand.toLowerCase() },
     };
 
     try {
@@ -35,7 +35,7 @@ export class BrandsRepo {
   async incrementBrandCounter(brand: string): Promise<VehicleBrand> {
     const params = {
       TableName: this.table,
-      Key: { brand },
+      Key: { brand: brand.toLowerCase() },
       UpdateExpression: 'ADD #counter :incrementBy',
       expressionAttributeNames: { '#counter': 'counter' },
       ExpressionAttributeValues: { ':incrementBy': 1 },

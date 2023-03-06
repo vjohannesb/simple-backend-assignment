@@ -14,7 +14,7 @@ const statements = [
   },
   {
     Effect: 'Allow',
-    Action: ['s3:GetObject'],
+    Action: ['s3:GetObject', 's3:DeleteObject'],
     Resource: 'arn:aws:s3:::${self:provider.environment.VEHICLE_BRANDS_BUCKET}-${self:provider.environment.STAGE}/*',
   },
   {

@@ -7,6 +7,22 @@
 
 This repository provides backend API functionality for vehicle brand counter service, using [Serverless Framework](https://www.serverless.com/framework/docs).
 
+### 📝 Assignment
+
+- ☑️ Use any mechanism to place a text document in a S3 bucket. The text file will contain one or many vehicle brands, one on each row in the document.
+- ☑️ Placing the document on S3 will trigger a Lambda function, that will:
+  - ☑️ read the document
+  - ☑️ parse each line
+  - ☑️ post the content (a brand name) on a SQS queue.
+  - If the operation is successful, delete the input file.
+  - If the operation is unsuccessful produce a meaningful error output to the log.
+  - ☑️ Empty file and unreadable/corrupt file will produce error logs.
+- ☑️ Another Lambda function will consume the SQS queue.
+  - ☑️ The content of the message (a brand) will be stored in a database.
+  - ☑️ The data should be structured according to DynamoDB best practices and stored in a way that allows for keeping track of how many times a certain type of brand have been registered.
+  - ☑️ An info log entry will be outputted to CloudWatch for each new message, if the operation is successful.
+  - ☑️ Identify potential errors that can occur and output these errors to the log.
+
 ## 🛠️ Before getting started
 
 - Before deploying this service, you should fill out the appropriate environment variables in [`/config/env.yml`](/config/env.yml) such as `AWS_ACCOUNT`, `AWS_REGION`, and `VEHICLE_BRANDS_BUCKET`. Given that S3 buckets require globally unique names, this (most likely) won't deploy as-is.

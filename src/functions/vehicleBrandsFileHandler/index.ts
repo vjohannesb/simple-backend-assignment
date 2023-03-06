@@ -1,11 +1,7 @@
-import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { deleteS3Object, parseUploadedFile } from './vehicleBrandsFileHandler';
 import { SQSRepo } from '../SQSRepo';
-import { SendMessageCommandOutput } from '@aws-sdk/client-sqs';
-import { parseBrandTextFile, validateTextFile } from './vehicleBrandsFileHandler';
 
-const s3 = new S3Client({ region: 'eu-north-1' });
 const sqs = new SQSRepo();
-
 export async function handler(event: AWSLambda.S3Event): Promise<void> {
   const records = event.Records;
   if (!records?.length) {
@@ -15,43 +11,15 @@ export async function handler(event: AWSLambda.S3Event): Promise<void> {
 
   for (const record of records) {
     const { bucket, object } = record.s3;
-    const params = {
-      Bucket: bucket.name,
-      Key: object.key,
-    };
+    const params = { Bucket: bucket.name, Key: object.key };
 
-    let brands: string[];
-    try {
-      const s3Response = await s3.send(new GetObjectCommand(params));
-      if (s3Response.ContentType !== 'text/plain') {
-        console.error(`Invalid content type for file: ${params.Key}`);
-        continue;
-      }
+    const brands = await parseUploadedFile(params);
+    if (!brands) continue;
 
-      const textFile = await s3Response.Body?.transformToString();
-      const isValidTextFile = validateTextFile(textFile);
-      if (!isValidTextFile) {
-        console.error(`Invalid file format for file: ${params.Key}`);
-        continue;
-      }
+    const sqsResult = await sqs.sendBrandsToSQS(brands);
+    const success = sqsResult.every((result) => result?.MessageId);
+    if (!success) continue;
 
-      brands = parseBrandTextFile(textFile);
-      if (!brands?.length) {
-        console.error(`No brands found in file: ${params.Key}`);
-        continue;
-      }
-    } catch (ex) {
-      console.error(`Error when fetching s3 object (${params.Key}): `, ex?.message);
-      continue;
-    }
-
-    const promises: Promise<SendMessageCommandOutput>[] = [];
-    for (const brand of brands) {
-      console.log(`Sending brand to SQS: ${brand}`);
-      promises.push(sqs.sendBrandToSQS(brand));
-    }
-
-    const result = await Promise.all(promises);
-    console.log(`SQS messages sent: ${result.length}.`);
+    await deleteS3Object(params);
   }
 }

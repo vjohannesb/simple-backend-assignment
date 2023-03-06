@@ -8,7 +8,19 @@ export class SQSRepo {
     `/${process.env.AWS_ACCOUNT_ID}` +
     `/${process.env.VEHICLE_BRANDS_QUEUE}`;
 
-  async sendBrandToSQS(brand: string): Promise<SendMessageCommandOutput> {
+  async sendBrandsToSQS(brands: string[]): Promise<SendMessageCommandOutput[]> {
+    const promises: Promise<SendMessageCommandOutput>[] = [];
+    for (const brand of brands) {
+      console.log(`Sending brand to SQS: ${brand}`);
+      promises.push(this.sendBrandToSQS(brand));
+    }
+
+    const result = await Promise.all(promises);
+    console.log(`SQS messages sent: ${result.length}.`);
+    return result;
+  }
+
+  private async sendBrandToSQS(brand: string): Promise<SendMessageCommandOutput> {
     const params: SendMessageCommandInput = {
       QueueUrl: this.queueUrl,
       MessageBody: brand,

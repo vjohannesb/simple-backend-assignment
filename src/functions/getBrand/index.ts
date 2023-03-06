@@ -1,4 +1,4 @@
-import { BrandsRepo } from '../BrandsRepo';
+import { BrandsRepo } from '../BrandsTableRepo';
 import { badRequest, notFound, response } from '../response';
 
 const repo = new BrandsRepo();

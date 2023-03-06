@@ -1,4 +1,4 @@
-import { BrandsRepo } from '../BrandsRepo';
+import { BrandsRepo } from '../BrandsTableRepo';
 
 const repo = new BrandsRepo();
 export async function handler(event: AWSLambda.SQSEvent): Promise<void> {

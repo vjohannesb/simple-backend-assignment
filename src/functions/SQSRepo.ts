@@ -3,10 +3,7 @@ import { randomUUID } from 'crypto';
 
 export class SQSRepo {
   private static sqs: SQSClient = new SQSClient({ region: 'eu-north-1' });
-  private queueUrl =
-    `https://sqs.${process.env.AWS_REGION}.amazonaws.com` +
-    `/${process.env.AWS_ACCOUNT_ID}` +
-    `/${process.env.VEHICLE_BRANDS_QUEUE}`;
+  private queueUrl = `https://sqs.eu-north-1.amazonaws.com/${process.env.AWS_ACCOUNT}/${process.env.VEHICLE_BRANDS_QUEUE}`;
 
   async sendBrandsToSQS(brands: string[]): Promise<SendMessageCommandOutput[]> {
     const promises: Promise<SendMessageCommandOutput>[] = [];
@@ -25,6 +22,7 @@ export class SQSRepo {
       QueueUrl: this.queueUrl,
       MessageBody: brand,
       MessageDeduplicationId: randomUUID(),
+      MessageGroupId: 'vehicle-brands',
     };
 
     try {

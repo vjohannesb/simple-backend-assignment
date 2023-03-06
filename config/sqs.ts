@@ -5,5 +5,6 @@ export const vehicleBrandsSQS = {
   Properties: {
     QueueName: '${self:provider.environment.VEHICLE_BRANDS_QUEUE}',
     ContentBasedDeduplication: false,
+    FifoQueue: true,
   },
 };

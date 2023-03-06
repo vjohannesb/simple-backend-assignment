@@ -26,7 +26,7 @@ export default {
     events: [
       {
         s3: {
-          bucket: '${self:provider.environment.VEHICLE_BRANDS_BUCKET-${self:provider.environment.STAGE}',
+          bucket: '${self:provider.environment.VEHICLE_BRANDS_BUCKET}-${self:provider.environment.STAGE}',
           event: 's3:ObjectCreated:*',
           rules: [{ prefix: 'uploads/' }],
         },
@@ -39,7 +39,7 @@ export default {
       {
         sqs: {
           arn: {
-            'Fn::GetAtt': ['${self:provider.environment.VEHICLE_BRANDS_QUEUE}', 'Arn'],
+            'Fn::GetAtt': ['vehicleBrandsSQS', 'Arn'],
           },
         },
       },

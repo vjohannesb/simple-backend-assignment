@@ -8,7 +8,7 @@ const statements = [
     Effect: 'Allow',
     Action: ['sqs:SendMessage'],
     Resource:
-      'arn:aws:sqs:${self:provider.environment.AWS_REGION}:' +
+      'arn:aws:sqs:eu-north-1:' +
       '${self:provider.environment.AWS_ACCOUNT}:' +
       '${self:provider.environment.VEHICLE_BRANDS_QUEUE}',
   },
@@ -19,9 +19,9 @@ const statements = [
   },
   {
     Effect: 'Allow',
-    Action: ['dynamodb:Query', 'dynamodb:Scan', 'dynamodb:UpdateItem', 'dynamodb:PutItem'],
+    Action: ['dynamodb:Query', 'dynamodb:Scan', 'dynamodb:UpdateItem', 'dynamodb:PutItem', 'dynamodb:GetItem'],
     Resource: [
-      'arn:aws:dynamodb:${self:provider.environment.AWS_REGION}:' +
+      'arn:aws:dynamodb:eu-north-1:' +
         '${self:provider.environment.AWS_ACCOUNT}:' +
         'table/${self:provider.environment.VEHICLE_BRANDS_TABLE}',
     ],

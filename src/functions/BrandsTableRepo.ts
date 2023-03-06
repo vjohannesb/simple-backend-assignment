@@ -37,7 +37,7 @@ export class BrandsRepo {
       TableName: this.table,
       Key: { brand: brand.toLowerCase() },
       UpdateExpression: 'ADD #counter :incrementBy',
-      expressionAttributeNames: { '#counter': 'counter' },
+      ExpressionAttributeNames: { '#counter': 'counter' },
       ExpressionAttributeValues: { ':incrementBy': 1 },
       ReturnValues: 'ALL_NEW',
     };
